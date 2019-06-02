@@ -1,5 +1,7 @@
-# Undergraduater Research Internship - Syracuse University, New York, USA
+# Undergraduate Research Internship
 
+## Location
+- Syracuse University, New York, USA
 ## Supervisor
 + Prof. Chilukuri K. Mohan
 
