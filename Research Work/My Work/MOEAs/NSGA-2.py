@@ -1,11 +1,3 @@
-## TAKEN FROM : https://github.com/haris989/NSGA-II/blob/master/NSGA%20II.py
-
-# Program Name: NSGA-II.py
-# Description: This is a python implementation of Prof. Kalyanmoy Deb's popular NSGA-II algorithm
-# Author: Haris Ali Khan
-# Supervisor: Prof. Manoj Kumar Tiwari
-
-#Importing required modules
 import math
 import random
 import matplotlib.pyplot as plt
@@ -40,7 +32,7 @@ def sort_by_values(list1, values):
 def fast_non_dominated_sort(values1, values2):
     S=[[] for i in range(0,len(values1))]
     front = [[]]
-    n = [0 for i in range(0,len(values1))]
+    n=[0 for i in range(0,len(values1))]
     rank = [0 for i in range(0, len(values1))]
 
     for p in range(0,len(values1)):
@@ -59,11 +51,11 @@ def fast_non_dominated_sort(values1, values2):
 
     i = 0
     while(front[i] != []):
-        Q = []
+        Q=[]
         for p in front[i]:
             for q in S[p]:
                 n[q] =n[q] - 1
-                if( n[q] == 0 ):
+                if( n[q]==0):
                     rank[q]=i+1
                     if q not in Q:
                         Q.append(q)
@@ -97,7 +89,7 @@ def crossover(a,b):
 #Function to carry out the mutation operator
 def mutation(solution):
     mutation_prob = random.random()
-    if mutation_prob < 1:
+    if mutation_prob <1:
         solution = min_x+(max_x-min_x)*random.random()
     return solution
 
@@ -106,19 +98,20 @@ pop_size = 20
 max_gen = 200
 
 #Initialization
-min_x = -55
-max_x = 55
-solution = [min_x+(max_x-min_x)*random.random() for i in range(0,pop_size)] ## Population list initialized of size = pop_size
+min_x=-55
+max_x=55
+solution=[min_x+(max_x-min_x)*random.random() for i in range(0,pop_size)]
+function1_values = [function1(solution[i])for i in range(0,pop_size)]
+function2_values = [function2(solution[i])for i in range(0,pop_size)]
 
 gen_no=0
-
 while(gen_no<max_gen):
-    function1_values = [function1(solution[i]) for i in range(0,pop_size)]
-    function2_values = [function2(solution[i]) for i in range(0,pop_size)]
+    function1_values = [function1(solution[i])for i in range(0,pop_size)]
+    function2_values = [function2(solution[i])for i in range(0,pop_size)]
     non_dominated_sorted_solution = fast_non_dominated_sort(function1_values[:],function2_values[:])
     print("The best front for Generation number ",gen_no, " is")
-    for values in non_dominated_sorted_solution[0]:
-        print(round(solution[values],3),end=" ")
+    for valuez in non_dominated_sorted_solution[0]:
+        print(round(solution[valuez],3),end=" ")
     print("\n")
     crowding_distance_values=[]
     for i in range(0,len(non_dominated_sorted_solution)):
@@ -151,9 +144,10 @@ while(gen_no<max_gen):
     gen_no = gen_no + 1
 
 #Lets plot the final front now
-function1 = [-1 * i for i in function1_values]
-function2 = [-1 * j for j in function2_values]
+function1 = [-i for i in function1_values]
+function2 = [-j for j in function2_values]
 plt.xlabel('Function 1', fontsize=15)
 plt.ylabel('Function 2', fontsize=15)
 plt.scatter(function1, function2)
+plt.grid()
 plt.show()
