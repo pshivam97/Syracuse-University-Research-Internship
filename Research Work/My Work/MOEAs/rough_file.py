@@ -1,8 +1,61 @@
 import math
 import random
 import copy
+import matplotlib.pyplot as plt
 
-l = [0.012647280753518064, 0.024316864435699692, 0.08362011939184777, 0.11037197680160649, 0.27044034506946185, 0.35740229382982375, 0.3577900068874458, 0.45831928655598914, 0.464458223272709, 0.6511712063694894, 0.6633552871831733, 0.7000178187936887, 0.8082716303106294, 0.8818546560645845, 0.885738578330986, 0.9681300259673965, 0.9839437857146658, 1.0055569635908528, 1.0296593579429418, 1.0615157511752225, 1.135127474974665, 1.1419661348851218, 1.1430953370185999, 1.1593968407506894, 1.1612510232232216, 1.161848027651958, 1.1755803284925914, 1.1758656072743445, 1.1901536552985708, 1.2075040491601925, 1.2497488133920065, 1.2510187302110565, 1.301931593919159, 1.3042686370236962, 1.3042834450386471, 1.3220995549915127, 1.3542553276393565, 1.4098484445261745, 1.4098484445261747, 1.458123352782277, 1.531784875359593, 1.6281652345122142, 1.6370943982479438, 1.648934020262274, 1.7505614515833057, 1.7510676323489296, 1.774261290823786, 1.8270065163200806, 1.9458455030524098, 1.9467393417382017]
+def index_of(a,list): #returns index of "a" in "list" , else "-1"
+    for i in range(0,len(list)):
+        if list[i] == a:
+            return i
+    return -1
 
-for i in l :
-    print(round(i,2),end=" , ")
+def sort_by_values(front, values):
+    sorted_list = []
+    while(len(sorted_list) != len(front)):
+        sorted_list.append(index_of(min(values),values))
+        values[index_of(min(values),values)] = math.inf
+    return sorted_list
+
+def avg_crowding_distance(values1,values2,f) :
+    distance = [0 for i in range(4)]
+
+    distance[0] = 444 ### BIG NUMBER
+    distance[len(f) - 1] = 444  ### BIG NUMBER
+
+    for k in range(1,len(f)-1):
+        distance[k] = distance[k] + (values1[k+1] - values1[k-1])/(max(values1)-min(values1) + 1)
+    for k in range(1,len(f)-1):
+        distance[len(f)-k-1] = distance[len(f)-k-1] + (values2[k+1] - values2[k-1])/(max(values2)-min(values2) + 1)
+
+    sum_in_objective_space = 0
+    for i in range(1,len(f)-1) :
+        sum_in_objective_space += distance[i]
+
+    return sum_in_objective_space/4
+
+l1 = [[0.1,0.2,3.8,3.9],[1,2,3,4],[1.8,2.0,2.2,2.4]]
+l2 = [[3.9,3.8,0.2,0.1],[4,3,2,1],[2.2,2.0,1.8,1.6]]
+
+for i in range(3):
+    print(avg_crowding_distance(l1[i],l2[i],[1,2,3,4]))
+
+# f1 = plt.figure(1)
+# plt.xlim(-1,5)
+# plt.ylim(-1,5)
+# plt.grid()
+# plt.scatter(l1[0],l2[0])
+#
+# f2 = plt.figure(2)
+# plt.xlim(-1,5)
+# plt.ylim(-1,5)
+# plt.grid()
+# plt.scatter(l1[1],l2[1])
+#
+# f3 = plt.figure(3)
+# plt.xlim(-1,5)
+# plt.ylim(-1,5)
+# plt.grid()
+# plt.scatter(l1[2],l2[2])
+#
+#
+# plt.show()

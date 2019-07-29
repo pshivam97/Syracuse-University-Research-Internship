@@ -11,6 +11,8 @@ import random
 import matplotlib.pyplot as plt
 import copy
 
+MAX = 4444444444444444
+
 #First function to optimize
 def function1(x):
     value = x**2
@@ -80,13 +82,13 @@ def crowding_distance(values1, values2, front):
     sorted2 = sort_by_values(front, values2[:])
     # sorted3 = sort_by_values(front, values3[:])
 
-    distance[0] = 4444444444444444  ### BIG NUMBER
-    distance[len(front) - 1] = 4444444444444444  ### BIG NUMBER
+    distance[0] = MAX ### BIG NUMBER
+    distance[len(front) - 1] = MAX  ### BIG NUMBER
 
     for k in range(1,len(front)-1):
-        distance[k] = distance[k] + (values1[sorted1[k+1]] - values1[sorted1[k-1]])/(max(values1)-min(values1) + 1)
+        distance[k] = distance[k] + (values1[sorted1[k+1]] - values1[sorted1[k-1]])
     for k in range(1,len(front)-1):
-        distance[len(front)-k-1] = distance[len(front)-k-1] + (values2[sorted2[k+1]] - values2[sorted2[k-1]])/(max(values2)-min(values2) + 1)
+        distance[len(front)-k-1] = distance[len(front)-k-1] + (values2[sorted2[k+1]] - values2[sorted2[k-1]])
     # for k in range(1,len(front)-1) :
     #     distance[k] = distance[k] + (values3[sorted3[k+1]] - values3[sorted3[k-1]])/(max(values3) - min(values3))
 
@@ -168,7 +170,7 @@ if __name__ == '__main__' :
 
     #######################    Main program starts here   #########################
     pop_size = 40
-    max_gen = 400
+    max_gen = 200
     mutationRate = 0.2
     rank = [0 for i in range(0,pop_size)]
 
@@ -210,7 +212,6 @@ if __name__ == '__main__' :
     R_t = population
 
     generation_no = 0
-    no_of_generations = []
     average_crowding_distance_objective_space = []
     average_crowding_distance_data_space = []
 
@@ -270,16 +271,23 @@ if __name__ == '__main__' :
         sum_in_objective_space = 0
         for i in range(len(P_t)) :
             r = index_of(P_t[i],previous_R_t)
-            sum_in_objective_space += crowding_distance_values[rank[r]][index_of(r,fronts[rank[r]])]
+            dist_i = crowding_distance_values[rank[r]][index_of(r,fronts[rank[r]])]
+            # sum_in_objective_space += abs(dist_i)
 
+            if dist_i < MAX :
+                sum_in_objective_space += abs(dist_i)
+            else :
+                continue
+
+        print(sum_in_objective_space/pop_size)
         average_crowding_distance_objective_space.append(sum_in_objective_space/pop_size)
 
         sum_in_data_space = 0
         P_t_copy = copy.deepcopy(P_t)
         P_t_copy.sort()
         crowding_distance_data_space = [0 for i in range(len(P_t_copy))]
-        crowding_distance_data_space[0] = 4444444444444444
-        crowding_distance_data_space[len(P_t_copy)-1] = 4444444444444444
+        crowding_distance_data_space[0] = MAX
+        crowding_distance_data_space[len(P_t_copy)-1] = MAX
         P_t_max = max(P_t_copy)
         P_t_min = min(P_t_copy)
 
@@ -288,7 +296,6 @@ if __name__ == '__main__' :
             sum_in_data_space += crowding_distance_data_space[i]
 
         average_crowding_distance_data_space.append(sum_in_data_space/pop_size-2)
-        no_of_generations.append(generation_no)
 
         ### WHILE LOOP ENDS HERE
 
@@ -319,8 +326,8 @@ if __name__ == '__main__' :
     ax = f3.add_subplot(111)
 
     plt.xlabel('No. of Generations (Computational Effort)', fontsize=15)
-    plt.ylabel('Average Crowding Distance', fontsize=15)
-    ax.plot(average_crowding_distance_objective_space,color='blue',marker='o',markersize=1,linewidth=1)
+    plt.ylabel('Normalized Average Crowding Distance', fontsize=15)
+    ax.plot(average_crowding_distance_objective_space,color='blue',marker='o',markersize=2,linewidth=1)
     ax.plot(average_crowding_distance_data_space,color='orange',marker='o',markersize=2,linewidth=1)
     plt.grid()
 
