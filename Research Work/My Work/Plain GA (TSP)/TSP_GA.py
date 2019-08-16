@@ -417,13 +417,16 @@ if __name__ == '__main__':
    all_runs_best_fitnessT = [(1/total_run_of_algorithm)*sum(i) for i in zip(*best_fitness_zipped_listT)]
 
    # Curves for FitnessProportionate method
-   ax.plot(no_of_fitness_evaluationsF, all_runs_avg_fitnessF,color='blue', marker='o', linewidth=1, markersize=6)
-   ax.plot(no_of_fitness_evaluationsF, all_runs_best_fitnessF,color='orange', marker='o', linewidth=1, markersize=6)
+   ax.plot(no_of_fitness_evaluationsF, all_runs_avg_fitnessF,color='blue', marker='o', linewidth=1, markersize=6,label="Average Fitness (Fitness Proportionate)")
+   ax.plot(no_of_fitness_evaluationsF, all_runs_best_fitnessF,color='orange', marker='o', linewidth=1, markersize=6,label="Best Fitness (Fitness Proportionate)")
 
    # Curves for Tournament Selection method
-   ax.plot(no_of_fitness_evaluationsT, all_runs_avg_fitnessT,color='red', marker='x', linewidth=1, markersize=6)
-   ax.plot(no_of_fitness_evaluationsT, all_runs_best_fitnessT,color='green', marker='x', linewidth=1, markersize=6)
+   ax.plot(no_of_fitness_evaluationsT, all_runs_avg_fitnessT,color='red', marker='x', linewidth=1, markersize=6,label="Average Fitness (Tournament)")
+   ax.plot(no_of_fitness_evaluationsT, all_runs_best_fitnessT,color='green', marker='x', linewidth=1, markersize=6,label="Best Fitness (Tournament)")
 
-   plt.ylim(0.00035, 0.0011)
+   plt.xlabel('No. of Fitness Evaluations (Computational Effort)', fontsize=15)
+   plt.ylabel('Fitness Values', fontsize=15)
+   plt.legend()
+   plt.ylim(0.00035, 0.001)
    plt.grid()
    plt.show()
